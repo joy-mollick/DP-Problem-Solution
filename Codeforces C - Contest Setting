@@ -1,0 +1,51 @@
+
+/// dp[i][j] stores the number of cases in which j numbers are selected.
+
+/// Then, the number of cases in which j numbers are selected from the number of i types can be selected by the i-th number or not.
+
+/// That is, dp[i][j]=dp[i-1][j]+dp[i-1][j-1]*freq[i] . (freq[i] is the number of the i-th kind)
+
+/// Codeforces C - Contest Setting
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define MAXN 1000 + 10
+
+long long freq[MAXN];
+int n,m;
+
+long long dp[MAXN][MAXN];
+long long difficulty_lev[MAXN];
+int tot=1;
+
+const long long mod=998244353;
+
+int main()
+
+{
+     cin >>n>>m;
+
+    for(int i=1; i<=n; i++)
+    {
+        int a;
+        cin>>a;
+        if(!freq[a]) {difficulty_lev[tot++] = a;}
+        freq[a]++;
+    }
+
+    for(int i=0; i<=tot-1; i++) {dp[i][0] = 1;}
+
+    /// we will count over distinct values
+    for(int i=1; i<=tot-1; i++)
+    {
+        for(int j=1; j<=m; j++)
+        {
+            dp[i][j] = (dp[i-1][j]+dp[i-1][j-1]*freq[difficulty_lev[i]]) % mod;
+        }
+    }
+    cout << dp[tot-1][m] % mod << endl;
+    return 0;
+
+}
